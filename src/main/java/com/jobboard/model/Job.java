@@ -3,10 +3,20 @@ package com.jobboard.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "jobs")
 public class Job {
+
+    @ManyToMany
+    @JoinTable(
+            name = "job_tags",
+            joinColumns = @JoinColumn(name = "job_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -151,6 +161,18 @@ public class Job {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
+
+    public void removeTag(Tag tag) {
+        this.tags.remove(tag);
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
     }
 }
 
